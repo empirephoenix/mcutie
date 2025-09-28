@@ -192,7 +192,7 @@ impl<'t, T: Deref<Target = str> + 't, L: Publishable + 't, const S: usize>
     /// Initialises the MQTT stack returning a receiver for listening to
     /// messages from the broker and a future that must be run in order for the
     /// stack to operate.
-    pub fn build(self) -> (McutieReceiver, McutieTask<'t, T, L, S>) {
+    pub fn build(self, keep_alive: u16) -> (McutieReceiver, McutieTask<'t, T, L, S>) {
         let mut dtype = String::<32>::new();
         dtype.push_str(self.device_type).unwrap();
         DEVICE_TYPE.set(dtype).unwrap();
@@ -217,6 +217,7 @@ impl<'t, T: Deref<Target = str> + 't, L: Publishable + 't, const S: usize>
                 username: self.username,
                 password: self.password,
                 subscriptions: self.subscriptions,
+                keep_alive
             },
         )
     }

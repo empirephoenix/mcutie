@@ -187,6 +187,7 @@ where
     pub(crate) username: Option<&'t str>,
     pub(crate) password: Option<&'t str>,
     pub(crate) subscriptions: [Topic<T>; S],
+    pub(crate) keep_alive: u16
 }
 
 impl<'t, T, L, const S: usize> McutieTask<'t, T, L, S>
@@ -372,7 +373,7 @@ where
         if buffer
             .encode_packet(&Packet::Connect(Connect {
                 protocol: Protocol::MQTT311,
-                keep_alive: 60,
+                keep_alive: self.keep_alive,
                 client_id: device_id(),
                 clean_session: true,
                 last_will,
